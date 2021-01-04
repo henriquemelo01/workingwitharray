@@ -150,28 +150,28 @@ acMov.forEach(function (movement, index, array) {
 
 // forEach() working with Maps and Sets
 
-const currencies2 = new Map([
-  ['USD', 'United States dollar'],
-  ['EUR', 'Euro'],
-  ['GBP', 'Pound sterling'],
-  ['BRL', 'Brazilian Real'],
-]);
+// const currencies2 = new Map([
+//   ['USD', 'United States dollar'],
+//   ['EUR', 'Euro'],
+//   ['GBP', 'Pound sterling'],
+//   ['BRL', 'Brazilian Real'],
+// ]);
 
-console.log('Currencies \n\n');
-currencies2.forEach(function (cur, key, map) {
-  console.log(`${key}: ${cur}`);
-});
+// console.log('Currencies \n\n');
+// currencies2.forEach(function (cur, key, map) {
+//   console.log(`${key}: ${cur}`);
+// });
 
 // Set: An data structure that contains unique values. Set data structure doesn't have index and keys.
 
-const currenciesUnique = new Set(['USD', 'GPB', 'USD', 'EUR', 'EUR']);
-console.log(currenciesUnique);
+// const currenciesUnique = new Set(['USD', 'GPB', 'USD', 'EUR', 'EUR']);
+// console.log(currenciesUnique);
 
-let i = 0;
-currenciesUnique.forEach(function (value, _, set) {
-  i++;
-  console.log(`Currencie ${i}: ${value} `);
-});
+// let i = 0;
+// currenciesUnique.forEach(function (value, _, set) {
+//   i++;
+//   console.log(`Currencie ${i}: ${value} `);
+// });
 
 // DOM MANIPULATION + forEach method (creating DOM elements):
 
@@ -182,6 +182,9 @@ app.style.opacity = '100';
 // Criando uma função que percorre todo vetor que contem as transaões (deposito e retiradas - movements) e as exibi na lista de movements do aplicativo:
 
 const displayMovements = function (movements) {
+  // Removendo elementos usando a propriedade innerHTML como setter, esta propriedade retorna todos elementos HTMLS presentes no container:
+  containerMovements.innerHTML = '';
+
   // Para percorrer o vetor utilizamos o metodo forEach (itineration) que executa uma determinada função para cada elemento do vetor que chamou o metodo.
 
   movements.forEach(function (movement, index, movements) {
@@ -203,10 +206,74 @@ const displayMovements = function (movements) {
     </div>
     `;
 
-    // Inserindo elemento dentro do container antes do primeiro child element(primeiro elemento que esta dentro do container): https://developer.mozilla.org/en-US/docs/Web/API/Element/insertAdjacentHTML
+    // Inserindo elemento dentro do container antes do primeiro child element(primeiro elemento que esta dentro do container): https://developer.mozilla.org/en-US/docs/Web/API/Element/insertAdjacentHTML . O segundo parâmetro contem uma string que apresenta o código HTML.
 
     containerMovements.insertAdjacentHTML('afterbegin', html);
   });
 };
 
 displayMovements(account1.movements);
+
+// ------------------ Coding challenge #1 ------------------
+
+/*
+
+Julia and Kate are doing a study on dogs. So each of them asked 5 dog owners
+about their dog's age, and stored the data into an array (one array for each). For
+now, they are just interested in knowing whether a dog is an adult or a puppy.
+A dog is an adult if it is at least 3 years old, and it's a puppy if it's less than 3 years
+old.
+Your tasks:
+Create a function 'checkDogs', which accepts 2 arrays of dog's ages
+('dogsJulia' and 'dogsKate'), and does the following things:
+1. Julia found out that the owners of the first and the last two dogs actually have
+cats, not dogs! So create a shallow copy of Julia's array, and remove the cat
+ages from that copied array (because it's a bad practice to mutate function
+parameters)
+2. Create an array with both Julia's (corrected) and Kate's data
+3. For each remaining dog, log to the console whether it's an adult ("Dog number 1
+is an adult, and is 5 years old") or a puppy ("Dog number 2 is still a puppy
+�
+")
+4. Run the function for both test datasets
+Test data:
+§ Data 1: Julia's data [3, 5, 2, 12, 7], Kate's data [4, 1, 15, 8, 3]
+§ Data 2: Julia's data [9, 16, 6, 8, 3], Kate's data [10, 5, 6, 1, 4]
+
+
+*/
+
+// Data 1:
+const dogsJulia = [3, 5, 2, 12, 7];
+const dogsKate = [4, 1, 15, 8, 3];
+
+// Data 2 :
+const dogsJulia2 = [9, 16, 6, 8, 3];
+const dogsKate2 = [10, 5, 6, 1, 4];
+
+const checkDogs = function (ages1, ages2) {
+  // Criando uma shallow copy do vetor usando o metodo slice()
+  const copyDogsJulia = ages1.slice();
+
+  // Para remover os dois ultimos elementos usamos o metodo splice(-2), que remove os elementos a partir do antepenultimo elemento.
+
+  // console.log(copyDogsJulia.splice(-2)); // REMOVING CATS
+  copyDogsJulia.splice(-2);
+
+  // 2. Create an array with both Julia's (corrected) and Kate's data
+  const dogsAges = [...copyDogsJulia, ...ages2]; //spread operator
+
+  // 3. For each remaining dog, log to the console whether it's an adult or puppy
+
+  dogsAges.forEach(function (dogAge, i) {
+    const isDogAdult = dogAge >= 3 ? 'Adult' : 'Puppy';
+    console.log(
+      `Dog number ${i + 1} is an ${isDogAdult}, and is dog ${dogAge} years old`
+    );
+  });
+};
+
+console.log('--------- Data 1 ---------');
+checkDogs(dogsJulia, dogsKate);
+console.log('\n--------- Data 2 ---------');
+checkDogs(dogsJulia2, dogsKate2);
