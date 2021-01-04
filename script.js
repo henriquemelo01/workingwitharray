@@ -172,3 +172,38 @@ currenciesUnique.forEach(function (value, _, set) {
   i++;
   console.log(`Currencie ${i}: ${value} `);
 });
+
+// DOM MANIPULATION + forEach method (creating DOM elements):
+
+// Displaying app:
+const app = document.querySelector('.app');
+app.style.opacity = '100';
+
+// Criando uma função que percorre todo vetor que contem as transaões (deposito e retiradas - movements) e as exibi na lista de movements do aplicativo:
+
+const displayMovements = function (movements) {
+  // Para percorrer o vetor utilizamos o metodo forEach (itineration) que executa uma determinada função para cada elemento do vetor que chamou o metodo.
+
+  movements.forEach(function (movement, index, movements) {
+    // Criar um elemento HTML para cada iteração do vetor:
+
+    // Testando se a transação foi um deposito ou retirada
+    let movType = '';
+    if (movement > 0) {
+      movType = 'deposit';
+    } else if (movement < 0) {
+      movType = 'withdrawal';
+    }
+
+    // Criando o elemento HTML
+    const html = `
+    <div class="movements__row">
+      <div class="movements__type movements__type--${movType}">${
+      index + 1
+    } ${movType.toUpperCase()}</div>
+      < class="movements__value">${movement}€</>
+    </div>`;
+  });
+};
+
+displayMovements(account1.movements);
