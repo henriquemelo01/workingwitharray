@@ -255,9 +255,10 @@ const checkDogs = function (ages1, ages2) {
   // Criando uma shallow copy do vetor usando o metodo slice()
   const copyDogsJulia = ages1.slice();
 
-  // Para remover os dois ultimos elementos usamos o metodo splice(-2), que remove os elementos a partir do antepenultimo elemento.
+  // Para remover o primeiro e ultimo elemento usamos o metodo splice(0,1), e splice(-2) que remove os elementos a partir do antepenultimo elemento.
 
   // console.log(copyDogsJulia.splice(-2)); // REMOVING CATS
+  copyDogsJulia.splice(0, 1);
   copyDogsJulia.splice(-2);
 
   // 2. Create an array with both Julia's (corrected) and Kate's data
@@ -277,3 +278,41 @@ console.log('--------- Data 1 ---------');
 checkDogs(dogsJulia, dogsKate);
 console.log('\n--------- Data 2 ---------');
 checkDogs(dogsJulia2, dogsKate2);
+
+// Data transformations **: Methods that we create a new array based on transfoming data from other arrays (map ,filter,reduce).
+
+/*
+
+map() é um metodo dos vetores que é bastante semalhante ao forEach, a diferença entre eles é que o map cria um novo vetor baseado no vetor original
+
+filter() filtra elementos do vetor baseado em uma condição e cria um vetor com o resultado
+
+reduce() reduz um vetor há um único elemento (bola de neve)
+
+*/
+
+// Usando map() para criar um vetor que contem o resultado da conversão (Euro -> Real) das transações:
+
+const euroToReal = 6.49; // Cotação 04/01/2021
+
+const movementReal = movements.map(function (mov) {
+  return mov * euroToReal;
+});
+
+console.log(movements);
+console.log(movementReal);
+
+// Array function:
+const movementRealArr = movements.map(mov => mov * euroToReal);
+console.log(movementRealArr);
+
+// Cria um novo vetor que contem strings:
+
+const movementsDescription = movements.map(
+  (mov, i) =>
+    `Movement ${i + 1}: You ${mov > 0 ? 'deposit' : 'withdrew'} ${Math.abs(
+      mov
+    )}`
+);
+
+console.log(movementsDescription);
