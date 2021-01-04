@@ -198,11 +198,14 @@ const displayMovements = function (movements) {
     // Criando o elemento HTML
     const html = `
     <div class="movements__row">
-      <div class="movements__type movements__type--${movType}">${
-      index + 1
-    } ${movType.toUpperCase()}</div>
-      < class="movements__value">${movement}€</>
-    </div>`;
+          <div class="movements__type movements__type--${movType}">2 ${movType}</div>
+          <div class="movements__value">${movement}€</div>
+    </div>
+    `;
+
+    // Inserindo elemento dentro do container antes do primeiro child element(primeiro elemento que esta dentro do container): https://developer.mozilla.org/en-US/docs/Web/API/Element/insertAdjacentHTML
+
+    containerMovements.insertAdjacentHTML('afterbegin', html);
   });
 };
 
