@@ -580,3 +580,60 @@ const depositUSD = movements
   .reduce((acc, depositDolar) => acc + depositDolar, 0);
 
 console.log(`Deposito em dolares: $${depositUSD}`);
+
+// ------------------ Coding challenge #3 ------------------
+
+/* Rewrite the 'calcAverageHumanAge' function from Challenge #2, but this time as an arrow function, and using chaining!
+
+
+const calcAverageHumanAge = function (dogsAges) {
+  //  1. Calculate the dog age in human years using the following formula: if the dog is <= 2 years old, humanAge = 2 * dogAge. If the dog is > 2 years old, humanAge = 16 + dogAge * 4
+
+  // Obs: Como vamos precisar excluir os cachorros que não são adultos, vamos criar um  novo vetor que armazena todas as médias calculadas e usar o metodo filter();
+
+  const humansAges = dogsAges.map(function (dogAge, index) {
+    if (dogAge <= 2) {
+      return 2 * dogAge;
+    } else {
+      return 16 + dogAge * 4;
+    }
+  });
+
+  // 2. Excluindo os cachorros que não são adultos:
+  const adults = humansAges.filter(humansAge => humansAge >= 18);
+
+  // 3. Calculo Media das Idade dos cães adultos: Usando reduce para somar todos os valores do vetor adults, .length para calcular o seu de número de elementos -> Media = somaElementos/nº elementos
+
+  // const averageAge =
+  //   adults.reduce(function (acc, adult) {
+  //     return acc + adult; // atualiza accumulator
+  //   }, 0) / adults.length;
+
+  // Outra Solução
+  const averageAge = adults.reduce(function (acc, adult, i, arr) {
+    return acc + adult / arr.length;
+  }, 0);
+
+  return averageAge;
+};
+
+
+
+
+*/
+
+console.log('\n\n------------ Coding Chalenge #3 ------------');
+
+const calcAverageHumanAge2 = dogsAges =>
+  dogsAges
+    .map(dogHumanAge =>
+      dogHumanAge <= 2 ? 2 * dogHumanAge : 16 + dogHumanAge * 4
+    )
+    .filter(dogHumanAge => dogHumanAge >= 18)
+    .reduce(
+      (acc, dogAdult, i, dogsAdults) => acc + dogAdult / dogsAdults.length,
+      0
+    );
+const avgJulia = calcAverageHumanAge2(dogsJulia);
+const avgKate = calcAverageHumanAge2(dogsKate);
+console.log(avgJulia, avgKate);
