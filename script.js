@@ -214,6 +214,20 @@ const displayMovements = function (movements) {
 
 displayMovements(account1.movements);
 
+// Calc and print balance:
+
+const calcPrintBalance = function (acc) {
+  // Como a  função ira receber um vetor como parâmetro e vamos somar os valores de cada elemento do mesmo, pode-se utilizar .reduce();
+
+  const balance = acc.reduce(function (accumulator, mov) {
+    return accumulator + mov;
+  }, 0);
+
+  labelBalance.textContent = `${balance}€`;
+};
+
+calcPrintBalance(account1.movements);
+
 // ------------------ Coding challenge #1 ------------------
 
 /*
@@ -423,3 +437,35 @@ console.log(depositosForOf);
 // Using filter method for create an array that contains all withdrawal:
 const retiradas = movements.filter(mov => mov < 0);
 console.log(retiradas);
+
+// Reduce Method: We use reduce method to get all elements from an array and reduce  all to one single value. reduce(function (accumulator,currentValue, index, Arr), accStartValue );
+
+// Getting balance:
+// accumulator  (acc) -> Snowball
+
+const balance = movements.reduce(function (acc, cur, i, arr) {
+  // console.log(`Itineration ${i}: ${acc}`);
+  return acc + cur;
+}, 0);
+
+console.log(balance);
+
+// or
+
+let balanceFor = 0;
+movements.forEach(function (mov) {
+  balanceFor += mov;
+});
+
+console.log(balanceFor);
+
+// Maximum value of movements: Também podemos usar reduce para resolver este problema, uma vez que este metodo reduz o vetor em um unico valor:
+
+const maxMovValue = movements.reduce(function (acc, currentValue, i) {
+  // Acumulador será responsável por rastrear o nosso valor maximo:
+  console.log(acc, i);
+  if (acc > currentValue) return acc;
+  else return currentValue; // currentValue será o novo acc
+});
+
+console.log(maxMovValue);
