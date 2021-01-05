@@ -228,6 +228,37 @@ const calcPrintBalance = function (acc) {
 
 calcPrintBalance(account1.movements);
 
+// Display Income, Outcome, Interest:
+
+const calcDisplaySummary = function (acc) {
+  const interestRate = acc.interestRate / 100;
+  const movements = acc.movements;
+
+  const incomes = movements
+    .filter(mov => mov > 0)
+    .reduce((acc, dep) => acc + dep, 0);
+
+  const outcomes = movements
+    .filter(mov => mov < 0)
+    .reduce((acc, wit) => acc + wit, 0);
+
+  // const interest = incomes * interestRate;
+
+  // Calc interest using map + reduce;
+  const interest = movements
+    .filter(mov => mov > 0) // filtrar pelos depositos
+    .map(dep => dep * interestRate) // criar um vetor que contem todos interrest
+    .filter(int => int > 1) // banco só considera os interests maiores que 1
+    .reduce((acc, int) => acc + int, 0); // somar todos os interrest restantes de cada movement
+
+  // Displaying In , Out , Interest:
+  labelSumIn.textContent = `${incomes}€`;
+  labelSumOut.textContent = `${Math.abs(outcomes)}€`;
+  labelSumInterest.textContent = `${interest}€`;
+};
+
+calcDisplaySummary(account1);
+
 // ------------------ Coding challenge #1 ------------------
 
 /*
@@ -496,9 +527,9 @@ const juliaDogs = [5, 2, 4, 1, 15, 8, 3];
 const kateDogs = [16, 6, 10, 5, 6, 1, 4];
 
 const calcAverageHumanAge = function (dogsAges) {
-  // Calculate the dog age in human years using the following formula: if the dog is <= 2 years old, humanAge = 2 * dogAge. If the dog is > 2 years old, humanAge = 16 + dogAge * 4
+  //  1. Calculate the dog age in human years using the following formula: if the dog is <= 2 years old, humanAge = 2 * dogAge. If the dog is > 2 years old, humanAge = 16 + dogAge * 4
 
-  // Como vamos precisar excluir os cachorros que não são adultos, vamos criar um  novo vetor que armazena todas as médias calculadas e usar o metodo filter();
+  // Obs: Como vamos precisar excluir os cachorros que não são adultos, vamos criar um  novo vetor que armazena todas as médias calculadas e usar o metodo filter();
 
   const humansAges = dogsAges.map(function (dogAge, index) {
     if (dogAge <= 2) {
@@ -511,12 +542,17 @@ const calcAverageHumanAge = function (dogsAges) {
   // 2. Excluindo os cachorros que não são adultos:
   const adults = humansAges.filter(humansAge => humansAge >= 18);
 
-  // Calculo Media das Idade dos cães adultos: Usando reduce para somar todos os valores do vetor adults, .length para calcular o seu de número de elementos -> Media = somaElementos/nº elementos
+  // 3. Calculo Media das Idade dos cães adultos: Usando reduce para somar todos os valores do vetor adults, .length para calcular o seu de número de elementos -> Media = somaElementos/nº elementos
 
-  const averageAge =
-    adults.reduce(function (acc, adult) {
-      return acc + adult; // atualiza accumulator
-    }, 0) / adults.length;
+  // const averageAge =
+  //   adults.reduce(function (acc, adult) {
+  //     return acc + adult; // atualiza accumulator
+  //   }, 0) / adults.length;
+
+  // Outra Solução
+  const averageAge = adults.reduce(function (acc, adult, i, arr) {
+    return acc + adult / arr.length;
+  }, 0);
 
   return averageAge;
 };
@@ -524,3 +560,23 @@ const calcAverageHumanAge = function (dogsAges) {
 console.log('\n\n------------- Chalenge #2 -------------');
 console.log(`Average 1: ${calcAverageHumanAge(juliaDogs)}`);
 console.log(`Average 1: ${calcAverageHumanAge(kateDogs)}`);
+
+// Chaining Methods: Escrever todos os metodos em  uma única expressão para resolver um problema.
+
+// OBS: Não é uma boa prática usarmos esta tecnica, uma vez que ela prejudica a performace da aplicação, sobretudo, se for de larga escala. Além disso não é uma boa prática apalicar a tecnica quando trabalhamos com metodos que modificam o vetor como o splice ou reverse.
+
+console.log('\n\nChaining Methods');
+
+// Movements deposits -> Conversão de Euro para Dolar -> Add todos os valores, quanto foi deposito em dolares.
+
+// Inicialmente, utiliza-se o metodo filter para criar um novo vetor com os elementos filtrados, no caso que satisfazem a condicional mov > 0 (depositos). Em seguida com este mesmo vetor cria-se um novo usando map () que armazena o calculo da callback function cada vez que o vetor filtrado for percorrido. Por fim, utiliza-se o metodo reduce() para percorrer o vetor que contém os valores convertidos e soma-los armazenando em uma única variável.
+
+const eurToUsd = 1.21;
+
+// PipeLine
+const depositUSD = movements
+  .filter(mov => mov > 0)
+  .map(deposit => deposit * eurToUsd)
+  .reduce((acc, depositDolar) => acc + depositDolar, 0);
+
+console.log(`Deposito em dolares: $${depositUSD}`);
