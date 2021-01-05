@@ -355,3 +355,24 @@ const generateUserName = function () {
 const userNames = generateUserName();
 const jonas = userNames[0];
 console.log(jonas);
+
+//
+
+const generateUserNames = function () {
+  // userNames armazena um vetor que carrega o usuario de cada conta, para isso foi utilizada o metodo map:
+
+  const userNames = accounts.map(function (acc) {
+    let userString = '';
+    const username = acc.owner
+      .toLowerCase()
+      .split(' ')
+      .forEach(function (word) {
+        userString += word[0];
+      });
+    return userString; // A cada iteração do vetor username armazena a operação em um elemento do novo vetor userNames
+  });
+
+  return userNames; // Retorna o vetor gerado
+};
+
+console.log(generateUserNames());
