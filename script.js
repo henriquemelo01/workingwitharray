@@ -316,3 +316,42 @@ const movementsDescription = movements.map(
 );
 
 console.log(movementsDescription);
+
+// Computing username creating a fuction that uses a string method to split the string and get the initial caracteres from first and last name  of each account owner propertie:
+
+const computUserName = function () {
+  accounts.forEach(function (account) {
+    const accOwner = account.owner; // string
+    const arrOwner = accOwner.split(' '); // Returns an array that contains words of string
+    const firstName = arrOwner[0];
+    const lastName = arrOwner[1];
+    const user = (firstName[0] + lastName[0]).toLowerCase();
+    console.log(user);
+  });
+};
+
+computUserName();
+
+const user = 'Henrique Moraes Santos Melo';
+
+// Split all words from user string and create an array that contain all of these words:
+
+const generateUserName = function () {
+  let userNames = [];
+  accounts.forEach(function (acc) {
+    let userString = '';
+    const username = acc.owner
+      .toLowerCase()
+      .split(' ')
+      .forEach(function (word) {
+        userString += word[0];
+      });
+    userNames.push(userString);
+  });
+
+  return userNames;
+};
+
+const userNames = generateUserName();
+const jonas = userNames[0];
+console.log(jonas);
