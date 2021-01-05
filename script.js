@@ -404,3 +404,22 @@ const createUsernames = function () {
 
 createUsernames();
 console.log(accounts);
+
+// Filter Method: Filter an element that satisfied a certain condition and create a new array. We specified the condition using callback functions, this functions always return a boolean value.
+
+// Using filter method for create an array that contains all deposits:
+const depositos = movements.filter(function (mov) {
+  return mov > 0;
+});
+console.log(depositos);
+
+// Using for of
+const depositosForOf = [];
+for (const mov of movements) if (mov > 0) depositosForOf.push(mov);
+console.log(depositosForOf);
+
+// Obs: O metodo filter dos vetores é utilizado no paradigma funcional da programação. A principal vantagem de se utiliza-lo é a possibilidade de criarmos valores juntando diferentes metodos como fizemos na função que cria um usuario, onde juntou-se metodos de strings e arrays.
+
+// Using filter method for create an array that contains all withdrawal:
+const retiradas = movements.filter(mov => mov < 0);
+console.log(retiradas);
