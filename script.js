@@ -364,8 +364,8 @@ const generateUserNames = function () {
   const userNames = accounts.map(function (acc) {
     let userString = '';
     const username = acc.owner
-      .toLowerCase()
-      .split(' ')
+      .toLowerCase() // Coloca toda string em letra minuscula
+      .split(' ') // Cria um novo vetor que contém todas palavras da string acc.owner
       .forEach(function (word) {
         userString += word[0];
       });
@@ -376,3 +376,31 @@ const generateUserNames = function () {
 };
 
 console.log(generateUserNames());
+
+// Solução do Jonas:
+
+// Uma string que contém o dono da conta (account.owner): Transformações:  letra minuscula .toLowerCase() -> separa palavras da string criando um vetor que armazena cada uma delas .split(" ") -> criar um novo vetor que contém a primeira letra de cada palavra .map() - juntar os elementos do novo vetor .join("")
+
+const username = account1.owner
+  .toLowerCase()
+  .split(' ')
+  .map(word => word[0])
+  .join('');
+
+console.log(username);
+
+// Criar uma função que percorre todo accounts array e armazena um username criando uma propriedade user para cada um dos objetos account :
+
+const createUsernames = function () {
+  const usernamesArr = accounts.forEach(function (acc) {
+    // Cria propriedade user a cada iteração do vetor que contem os objetos account
+    acc.username = acc.owner
+      .toLowerCase()
+      .split(' ')
+      .map(word => word[0])
+      .join('');
+  });
+};
+
+createUsernames();
+console.log(accounts);
