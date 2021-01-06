@@ -231,11 +231,12 @@ const displayMovements = function (movements) {
 // displayMovements(account1.movements);
 
 // Calc and print balance:
+let balance;
 
 const calcPrintBalance = function (acc) {
   // Como a  função ira receber um vetor como parâmetro e vamos somar os valores de cada elemento do mesmo, pode-se utilizar .reduce();
 
-  const balance = acc.reduce(function (accumulator, mov) {
+  balance = acc.reduce(function (accumulator, mov) {
     return accumulator + mov;
   }, 0);
 
@@ -279,7 +280,9 @@ const calcDisplaySummary = function (acc) {
 
 let currentAccount;
 
-btnLogin.addEventListener('click', function () {
+btnLogin.addEventListener('click', function (e) {
+  e.preventDefault();
+
   // Pegando valores das caixas de texto do login
   const user = inputLoginUsername.value;
   const pin = Number(inputLoginPin.value);
@@ -291,8 +294,18 @@ btnLogin.addEventListener('click', function () {
   );
 
   if (currentAccount) {
-    // Display App:
+    // Display UI + Welcome Mensage:
     app.style.opacity = '100';
+    labelWelcome.textContent = `Welcome back, ${
+      currentAccount.owner.split(' ')[0]
+    }`;
+
+    // Limpando caixas de Login
+    inputLoginUsername.value = '';
+    inputLoginPin.value = '';
+
+    // Limpar efeito de foco:
+    inputLoginPin.blur();
 
     const movements = currentAccount.movements;
 
@@ -304,6 +317,58 @@ btnLogin.addEventListener('click', function () {
 
     // Calc Summary + Display
     calcDisplaySummary(currentAccount);
+  }
+});
+
+// Transfer Function:
+
+btnTransfer.addEventListener('click', function (e) {
+  e.preventDefault(); // metodo para tirar reset do navegador ao pressionar o botão
+
+  // Pegar os valores da caixa de texto da transferencia
+
+  const transferTo = inputTransferTo.value;
+  const transferAmount = Number(inputTransferAmount.value);
+  const currentAccMovs = currentAccount.movements;
+
+  // Verificar se a transferencia é valida: P/ isso será necessário verificar se o usuario que vai receber a transferência esta cadastrado no sistema. Além disso a transferência só será valida se a quantia a ser transferida for menor que o saldo da conta que esta transferindo.
+
+  // O metodo find será responsável por localizar a conta no array accounts cujo valor do usuario foi digitado no campo transferTo e retornar o objeto que contém o valor desta propriedade caso seja encontrado.
+
+  const transferAcc = accounts.find(acc => acc.username === transferTo);
+
+  // Verificando e trantando a existencia ou não da conta digitada no campo transferTo
+
+  const hasTransferAcc = transferAcc
+    ? transferAcc.username !== currentAccount.username
+    : false;
+
+  // Condições para efetuação da transferência:
+
+  if (hasTransferAcc && transferAmount < balance) {
+    // Limpar campos de transfência:
+    inputTransferTo.value = '';
+    inputTransferAmount.value = '';
+
+    // Adicionar Retirada na conta que efetuou a transferencia:
+    currentAccMovs.push(-transferAmount);
+
+    // Adicionar Deposito na conta que recebeu a transferência:
+    transferAcc.movements.push(transferAmount);
+    console.log(transferAcc);
+
+    // Calculo + Exibir novo Balanço
+    calcPrintBalance(currentAccMovs);
+
+    // Exibir retirada na lista de movimentaçoes:
+    displayMovements(currentAccMovs);
+
+    // Calcular + Exbir novo Summary:
+    calcDisplaySummary(currentAccount);
+  } else if (transferAcc === undefined) {
+    alert('Transferência Invalida: Conta não registrada no sistema');
+  } else {
+    alert('Operação Invalida');
   }
 });
 
@@ -508,7 +573,7 @@ console.log(retiradas);
 // Getting balance:
 // accumulator  (acc) -> Snowball
 
-const balance = movements.reduce(function (acc, cur, i, arr) {
+const balanceMov = movements.reduce(function (acc, cur, i, arr) {
   // console.log(`Itineration ${i}: ${acc}`);
   return acc + cur; // updating acumulator: acc = acc + cur;
 }, 0);
