@@ -177,7 +177,23 @@ acMov.forEach(function (movement, index, array) {
 
 // Displaying app:
 const app = document.querySelector('.app');
-app.style.opacity = '100';
+// app.style.opacity = '100';
+
+// Criando uma função que gera um username baseado nas primeiras letras de cada palavra do nome:
+
+const createUsernames = function () {
+  const usernamesArr = accounts.forEach(function (acc) {
+    // Cria propriedade user a cada iteração do vetor que contem os objetos account
+    acc.username = acc.owner
+      .toLowerCase()
+      .split(' ')
+      .map(word => word[0])
+      .join('');
+  });
+};
+
+createUsernames();
+console.log(accounts);
 
 // Criando uma função que percorre todo vetor que contem as transaões (deposito e retiradas - movements) e as exibi na lista de movements do aplicativo:
 
@@ -212,7 +228,7 @@ const displayMovements = function (movements) {
   });
 };
 
-displayMovements(account1.movements);
+// displayMovements(account1.movements);
 
 // Calc and print balance:
 
@@ -226,7 +242,7 @@ const calcPrintBalance = function (acc) {
   labelBalance.textContent = `${balance}€`;
 };
 
-calcPrintBalance(account1.movements);
+// calcPrintBalance(account1.movements);
 
 // Display Income, Outcome, Interest:
 
@@ -257,7 +273,39 @@ const calcDisplaySummary = function (acc) {
   labelSumInterest.textContent = `${interest}€`;
 };
 
-calcDisplaySummary(account1);
+// calcDisplaySummary(account1);
+
+// Login:
+
+let currentAccount;
+
+btnLogin.addEventListener('click', function () {
+  // Pegando valores das caixas de texto do login
+  const user = inputLoginUsername.value;
+  const pin = Number(inputLoginPin.value);
+
+  // Usando find para retornar no array o elemento que satisfaz a condição, ou seja, se as credenciais forem preenchidas corretamente find retorna o objeto correspondente (account), caso contrario retorna undefinied
+
+  currentAccount = accounts.find(
+    acc => acc.username === user && acc.pin === pin
+  );
+
+  if (currentAccount) {
+    // Display App:
+    app.style.opacity = '100';
+
+    const movements = currentAccount.movements;
+
+    // Calc Balance + Display
+    calcPrintBalance(movements);
+
+    // Display Movements:
+    displayMovements(movements);
+
+    // Calc Summary + Display
+    calcDisplaySummary(currentAccount);
+  }
+});
 
 // ------------------ Coding challenge #1 ------------------
 
@@ -435,20 +483,6 @@ const username = account1.owner
 console.log(username);
 
 // Criar uma função que percorre todo accounts array e armazena um username criando uma propriedade user para cada um dos objetos account :
-
-const createUsernames = function () {
-  const usernamesArr = accounts.forEach(function (acc) {
-    // Cria propriedade user a cada iteração do vetor que contem os objetos account
-    acc.username = acc.owner
-      .toLowerCase()
-      .split(' ')
-      .map(word => word[0])
-      .join('');
-  });
-};
-
-createUsernames();
-console.log(accounts);
 
 // Filter Method: Filter an element that satisfied a certain condition and create a new array. We specified the condition using callback functions, this functions always return a boolean value.
 
@@ -637,3 +671,12 @@ const calcAverageHumanAge2 = dogsAges =>
 const avgJulia = calcAverageHumanAge2(dogsJulia);
 const avgKate = calcAverageHumanAge2(dogsKate);
 console.log(avgJulia, avgKate);
+
+// Find Method: Percorre o vetor e retorna o primeiro elemento que satisfaz uma condição estabelecida na call back function (retorna valor booleano)
+const firstWithdrawal = movements.find(mov => mov < 0);
+console.log(firstWithdrawal);
+
+// Usando o metodo find podemos encontrar um objeto em um vetor baseado no valor de sua propriedade.
+
+const accountJonas = accounts.find(acc => acc.username === 'js');
+console.log(accountJonas);
