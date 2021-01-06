@@ -383,6 +383,37 @@ btnTransfer.addEventListener('click', function (e) {
   }
 });
 
+// Using findIndex Method to find index of element that we wanna to delete usig close account functionality:
+
+console.log(accounts.findIndex(acc => acc.username === 'js'));
+
+btnClose.addEventListener('click', function (e) {
+  e.preventDefault();
+  // Getting input fields:
+  const user = inputCloseUsername.value;
+  const pin = Number(inputClosePin.value);
+
+  // Cleaning input fields:
+  inputCloseUsername.value = '';
+  inputClosePin.value = '';
+
+  // Checking credentials:
+
+  if (user === currentAccount.username && pin === currentAccount.pin) {
+    // Find index of element that we wanna to delete
+    const index = accounts.findIndex(
+      acc => acc.username === currentAccount.username
+    );
+
+    // Removendo Conta do array
+    accounts.splice(index, 1);
+
+    // Logout:
+    app.style.opacity = '0';
+    labelWelcome.textContent = ' Log in to get started';
+  }
+});
+
 // ------------------ Coding challenge #1 ------------------
 
 /*
