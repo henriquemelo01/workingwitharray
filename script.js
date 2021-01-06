@@ -276,6 +276,19 @@ const calcDisplaySummary = function (acc) {
 
 // calcDisplaySummary(account1);
 
+// update UI:
+
+const updateUI = function (acc) {
+  // Calc Balance + Display
+  calcPrintBalance(acc.movements);
+
+  // Display Movements:
+  displayMovements(acc.movements);
+
+  // Calc Summary + Display
+  calcDisplaySummary(acc);
+};
+
 // Login:
 
 let currentAccount;
@@ -307,29 +320,34 @@ btnLogin.addEventListener('click', function (e) {
     // Limpar efeito de foco:
     inputLoginPin.blur();
 
-    const movements = currentAccount.movements;
+    // Display UI
+    updateUI(currentAccount);
 
-    // Calc Balance + Display
-    calcPrintBalance(movements);
+    // // Calc Balance + Display
+    // calcPrintBalance(movements);
 
-    // Display Movements:
-    displayMovements(movements);
+    // // Display Movements:
+    // displayMovements(movements);
 
-    // Calc Summary + Display
-    calcDisplaySummary(currentAccount);
+    // // Calc Summary + Display
+    // calcDisplaySummary(currentAccount);
   }
 });
 
 // Transfer Function:
 
 btnTransfer.addEventListener('click', function (e) {
-  e.preventDefault(); // metodo para tirar reset do navegador ao pressionar o botão
+  e.preventDefault(); // metodo para tirar reset do navegador ao pressionar o botão, comportamento padrão dos formularios.
 
   // Pegar os valores da caixa de texto da transferencia
 
   const transferTo = inputTransferTo.value;
   const transferAmount = Number(inputTransferAmount.value);
   const currentAccMovs = currentAccount.movements;
+
+  // Limpar campos de transfência:
+  inputTransferTo.value = '';
+  inputTransferAmount.value = '';
 
   // Verificar se a transferencia é valida: P/ isso será necessário verificar se o usuario que vai receber a transferência esta cadastrado no sistema. Além disso a transferência só será valida se a quantia a ser transferida for menor que o saldo da conta que esta transferindo.
 
@@ -343,28 +361,21 @@ btnTransfer.addEventListener('click', function (e) {
     ? transferAcc.username !== currentAccount.username
     : false;
 
+  // or: transferAcc?.username !== currentAccount.username
+
   // Condições para efetuação da transferência:
 
-  if (hasTransferAcc && transferAmount < balance) {
-    // Limpar campos de transfência:
-    inputTransferTo.value = '';
-    inputTransferAmount.value = '';
-
+  if (hasTransferAcc && transferAmount <= balance) {
     // Adicionar Retirada na conta que efetuou a transferencia:
     currentAccMovs.push(-transferAmount);
 
     // Adicionar Deposito na conta que recebeu a transferência:
     transferAcc.movements.push(transferAmount);
-    console.log(transferAcc);
 
     // Calculo + Exibir novo Balanço
-    calcPrintBalance(currentAccMovs);
-
     // Exibir retirada na lista de movimentaçoes:
-    displayMovements(currentAccMovs);
-
     // Calcular + Exbir novo Summary:
-    calcDisplaySummary(currentAccount);
+    updateUI(currentAccount);
   } else if (transferAcc === undefined) {
     alert('Transferência Invalida: Conta não registrada no sistema');
   } else {
