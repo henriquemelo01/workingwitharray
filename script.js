@@ -414,6 +414,31 @@ btnClose.addEventListener('click', function (e) {
   }
 });
 
+// Regra banco: Solicitação de emprestimo só é valida se a conta possuir algum deposito cujo valor é de pelo menos 10 % do valor solicitado no emprestimo:
+
+btnLoan.addEventListener('click', function (e) {
+  e.preventDefault();
+  const loanAmout = Number(inputLoanAmount.value);
+  const regraAtendida = currentAccount.movements.some(
+    mov => mov >= 0.1 * loanAmout
+  );
+
+  if (loanAmout > 0 && regraAtendida) {
+    // SetTimeout simula espera de solicitação pelo banco:
+    setTimeout(function () {
+      // Add Movement
+      currentAccount.movements.push(loanAmout);
+      updateUI(currentAccount);
+    }, 2000);
+  } else {
+    alert(
+      '🚨 Pedido de Emprestimo Negado . O emprestimo só será validado se tiver pelo menos um único deposito de 10% do valor solicitado'
+    );
+  }
+
+  inputLoanAmount.value = '';
+});
+
 // ------------------ Coding challenge #1 ------------------
 
 /*
@@ -787,3 +812,16 @@ console.log(firstWithdrawal);
 
 const accountJonas = accounts.find(acc => acc.username === 'js');
 console.log(accountJonas);
+
+// Some and every Methods
+
+// .includes() : Search for specific element and return true or false:
+console.log(movements.includes(-130));
+
+// .some() : Run an array searching for specific condition and return true or false:
+const hasDeposits = movements.some(mov => mov > 0);
+console.log(hasDeposits);
+
+// .every() : If every element of array satisfies a callback function condition then the method return true otherwise the method will return false
+const onlyDeposit = movements.every(mov => mov > 0);
+console.log(onlyDeposit);
