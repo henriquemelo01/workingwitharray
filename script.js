@@ -920,3 +920,59 @@ movements.sort((a, b) => {
 });
 
 console.log(movements);
+
+// How to programmatically create and fill arrays:
+
+// Using Array constructor function:
+
+// Quando passamos como parâmetro um número, por padrao a função cria um array com X elementos vazios:
+const x = new Array(5); // Empty array just accept fill method
+
+console.log(x);
+
+x.fill(5);
+console.log(x);
+
+// .fill (value,start,end)
+x.fill(1, 1, 3); // prenche todo array com o valor passado como parâmetro
+console.log(x);
+
+// Array.from(ObjCaractArray, map function); - Metodo do array constructor function -> Creating an array from other things, doing it we can use array methods in other elements.
+
+// Obs: CallBack function: Retorna 1 a cada iteração, assim não precisamos inserir nenhum argumento:
+
+// Array() : Function object
+let y = Array.from({ length: 7 }, () => 1);
+console.log(y);
+
+// Um comando equivalente seria se aplicassemos o metodo map() em um array vazio de 7 elementos:
+const z = Array.from({ length: 7 }, (cur, i) => i + 1);
+console.log(z);
+
+// Usando o metodo from do construtor Array para criar um array que armazena 100 números aleatorios:
+const dice = Array.from({ length: 100 }, cur =>
+  Math.trunc(Math.random() * 6 + 1)
+);
+console.log(dice);
+
+// Ex: Nodelist -> Array: Imagine se nós tivessemos os valores das movimentações apenas na interface, assim usamos Array.from() para criar um array com estes valores:
+
+labelBalance.addEventListener('click', function () {
+  const movementsUI = Array.from(
+    document.querySelectorAll('.movements__value'),
+    el => Number(el.textContent.replace('€', ''))
+  );
+  console.log(movementsUI);
+
+  // Or
+  const movementsUI2 = [...document.querySelectorAll('.movements__value')];
+  console.log(movementsUI2.map(el => Number(el.textContent.replace('€', ''))));
+});
+
+// Resumo: Principais metodos dos arrays: forEach(), map(), filter(), reduce(), find(), findIndex() e Array.from()
+
+/* Quando usar cada um dos metodos estudados (Aula 162):
+
+http://prntscr.com/wij741
+
+*/
