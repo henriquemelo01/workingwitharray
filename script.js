@@ -825,3 +825,41 @@ console.log(hasDeposits);
 // .every() : If every element of array satisfies a callback function condition then the method return true otherwise the method will return false
 const onlyDeposit = movements.every(mov => mov > 0);
 console.log(onlyDeposit);
+
+// .flat() Method: Foi introduzido no ES2019. The Method creates a new array with all sub-array elements concatenated into it recursively up to the specified depth.
+
+const arr4 = [[1, 2, 3], 4, 5, 6, 7, [8, 9, 10]];
+const newArr = arr4.flat();
+console.log(newArr);
+
+// Obs.flat(depth) The depth level specifying how deep a nested array structure should be flattened. Defaults to 1.
+const arrDeep = [[[1, 2], 3], 4, 5, 6, 7, [[8, 9], 10]];
+console.log(arrDeep.flat(1));
+console.log(arrDeep.flat(2));
+
+// Calcular balanço total de todas as contas usando flat
+
+// Creating a new array that contains all movements arrays using map() + flat(2) + sum all elements using reduce():
+
+// map return -> newArr = [account1.mov,account2.mov...].
+
+const accountMovements = accounts.map(acc => acc.movements);
+console.log(accountMovements);
+
+// .flat(2) retorna a união de todos elementos do array criado pelo metodo map
+
+const allMovements = accountMovements.flat(2);
+console.log(allMovements);
+
+const balanceOveral = allMovements.reduce((acc, mov) => acc + mov, 0);
+console.log(balanceOveral);
+
+// Joining all elements in a new array
+console.log(`Balance Overal: $${balanceOveral}`);
+
+//  solving using flatMap():
+const balanceOveral2 = accounts
+  .flatMap(acc => acc.movements) // So acessa o primeiro nível de profundidade
+  .reduce((acc, mov) => acc + mov);
+
+console.log(`Balance Overal: $${balanceOveral2}`);
