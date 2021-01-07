@@ -197,13 +197,16 @@ console.log(accounts);
 
 // Criando uma função que percorre todo vetor que contem as transaões (deposito e retiradas - movements) e as exibi na lista de movements do aplicativo:
 
-const displayMovements = function (movements) {
+const displayMovements = function (movements, sort = false) {
   // Removendo elementos usando a propriedade innerHTML como setter, esta propriedade retorna todos elementos HTMLS presentes no container:
   containerMovements.innerHTML = '';
 
+  // sort = true, criar uma shallow copy usando slice() e ordena-la usando sort
+
+  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
   // Para percorrer o vetor utilizamos o metodo forEach (itineration) que executa uma determinada função para cada elemento do vetor que chamou o metodo.
 
-  movements.forEach(function (movement, index, movements) {
+  movs.forEach(function (movement, index, movements) {
     // Criar um elemento HTML para cada iteração do vetor:
 
     // Testando se a transação foi um deposito ou retirada
@@ -293,6 +296,9 @@ const updateUI = function (acc) {
 
 let currentAccount;
 
+// Criando uma variável de estado o botão sort:
+let sorted = false;
+
 btnLogin.addEventListener('click', function (e) {
   e.preventDefault();
 
@@ -307,6 +313,8 @@ btnLogin.addEventListener('click', function (e) {
   );
 
   if (currentAccount) {
+    sorted = false;
+
     // Display UI + Welcome Mensage:
     app.style.opacity = '100';
     labelWelcome.textContent = `Welcome back, ${
@@ -437,6 +445,14 @@ btnLoan.addEventListener('click', function (e) {
   }
 
   inputLoanAmount.value = '';
+});
+
+// Criando uma variável de estado o botão sort:
+
+btnSort.addEventListener('click', function (e) {
+  e.preventDefault();
+  displayMovements(currentAccount.movements, !sorted);
+  sorted = !sorted;
 });
 
 // ------------------ Coding challenge #1 ------------------
@@ -863,3 +879,44 @@ const balanceOveral2 = accounts
   .reduce((acc, mov) => acc + mov);
 
 console.log(`Balance Overal: $${balanceOveral2}`);
+
+// Strings: Ordena um array que contem strings baseado na ordem alfabetica :
+
+const owners = ['Jonas', 'Zack', 'Adam', 'Martha'];
+console.log(owners.sort()); // Muda o array original
+
+// Numbers: Converte todos os elementos em strings e os organiza, assim o metodo .sort() não organiza os números em ordem númerica.
+console.log(movements);
+console.log(movements.sort());
+
+// Using compareFunction inside sort. Specifies a function that defines the sort order. If omitted, the array elements are converted to strings, then sorted according to each character's Unicode code point value.
+
+// a: The first element for comparison / b: The second element for comparison.
+
+// Se retorno da comparação for negativo, A,B
+console.log('Sort + callBackFunction');
+console.log(movements);
+
+// Ordem Crescente:
+// movements.sort((a, b) => {
+//   if (a > b) {
+//     return 1; // Se return > 0 , B,A (switch order)
+//   } else {
+//     return -1; //Se return < 0 , A,B (keep order)
+//   }
+// });
+
+// Se o a for maior que b , inverter ordem
+movements.sort((a, b) => a - b);
+console.log(movements);
+
+// Ordem Decrescente:
+movements.sort((a, b) => {
+  if (a > b) {
+    return -1; // Se return > 0 , B,A (switch order)
+  } else {
+    return 1; //Se return < 0 , A,B (keep order)
+  }
+});
+
+console.log(movements);
